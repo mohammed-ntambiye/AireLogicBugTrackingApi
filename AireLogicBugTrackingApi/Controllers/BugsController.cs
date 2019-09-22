@@ -1,32 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using AireLogicBugTrackingApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace AireLogicBugTrackingApi.Controllers
 {
+    [Route("api/[controller]")]
     public class BugsController : Controller
     {
+        protected ApplicationDbContext DbContext;
         // GET api/values
+
+        public BugsController(ApplicationDbContext context)
+        {
+            DbContext = context;  
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            DbContext.Database.EnsureCreated();
+            return Ok(DbContext.Bugs.ToList());
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{Id}")]
+        public IActionResult Get(int id)
         {
-            return "value";
+            return Ok(DbContext.Bugs.FirstOrDefault(b => b.BugId == id));
+               
         }
 
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Post([FromBody]BugsModel value)
         {
+            try
+            {
+                DbContext.Database.EnsureCreated();
+                DbContext.Bugs.Add(value);
+                DbContext.SaveChanges();
+            }
+            catch (SqlException exception)
+            {
+                Console.WriteLine(exception.ToString());
+                return StatusCode(500);
+            }
+            return Accepted();
         }
 
         // PUT api/values/5
@@ -39,6 +61,7 @@ namespace AireLogicBugTrackingApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+
         }
     }
 }
