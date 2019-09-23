@@ -6,48 +6,40 @@ using System.Threading.Tasks;
 using AireLogicBugTrackingApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace AireLogicBugTrackingApi.Controllers
 {
     [Route("api/[controller]")]
-    public class BugsController : Controller
+    public class AccountsController : Controller
     {
-        protected ApplicationDbContext DbContext;
-   
 
-        public BugsController(ApplicationDbContext context)
+        protected ApplicationDbContext DbContext;
+
+        public AccountsController(ApplicationDbContext context)
         {
-            DbContext = context;  
+            DbContext = context;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
             DbContext.Database.EnsureCreated();
-            return Ok(DbContext.Bugs.ToList());
-        }
-
-        [HttpGet("OpenBugs")]
-        public IActionResult OpenBugs()
-        {
-            DbContext.Database.EnsureCreated();
-            return Ok(DbContext.Bugs.Where(b => b.IsOpen ==true));
+            return Ok(DbContext.Users.ToList());
         }
 
         [HttpGet("{Id}")]
         public IActionResult Get(int id)
         {
-            return Ok(DbContext.Bugs.FirstOrDefault(b => b.BugId == id));
-               
+            return Ok(DbContext.Users.FirstOrDefault(b => b.UserId == id));
+
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]BugsModel value)
+        public IActionResult Post([FromBody]UserModel value)
         {
             try
             {
                 DbContext.Database.EnsureCreated();
-                DbContext.Bugs.Add(value);
+                DbContext.Users.Add(value);
                 DbContext.SaveChanges();
             }
             catch (SqlException exception)
@@ -58,14 +50,13 @@ namespace AireLogicBugTrackingApi.Controllers
             return Accepted();
         }
 
-       
+
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
-
         }
 
-        
+
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

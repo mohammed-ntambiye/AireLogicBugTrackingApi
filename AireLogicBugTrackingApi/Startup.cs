@@ -42,7 +42,13 @@ namespace AireLogicBugTrackingApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Bugs}/{action=Get}");
+            });
+
         }
     }
 }
