@@ -13,27 +13,27 @@ namespace AireLogicBugTrackingApi.Models
         [Key]
         public int BugId { get; set; }
 
-        [Required]
+        //[Required]
         public string BugTitle { get; set; }
 
-        [Required]
+        //[Required]
         public DateTime TimeStamp { get; set; }
 
         public string TypeOfBug { get; set; }
 
-        [Required]
+        //[Required]
         public string Description { get; set; }
 
         public  string Priority { get; set; }
 
-        [Required]
+        ////[Required]
         public UserModel Author { get; set; }
     
-        public AssignedStatus AssignedFlag { get; set; }
+        //public AssignedStatus AssignedFlag { get; set; }
 
         public bool IsOpen { get; set; }
 
-        [Required]
+        //[Required]
         public string Status { get; set; }
 
     }

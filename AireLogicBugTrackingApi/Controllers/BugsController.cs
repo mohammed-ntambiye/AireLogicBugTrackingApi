@@ -37,6 +37,7 @@ namespace AireLogicBugTrackingApi.Controllers
         [HttpGet("{Id}")]
         public IActionResult Get(int id)
         {
+            DbContext.Database.EnsureCreated();
             return Ok(DbContext.Bugs.FirstOrDefault(b => b.BugId == id));
                
         }
@@ -46,6 +47,7 @@ namespace AireLogicBugTrackingApi.Controllers
         {
             try
             {
+                value.Author = new UserModel { };
                 DbContext.Database.EnsureCreated();
                 DbContext.Bugs.Add(value);
                 DbContext.SaveChanges();
@@ -69,7 +71,8 @@ namespace AireLogicBugTrackingApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-
+            DbContext.Bugs.Remove(DbContext.Bugs.Single(c => c.BugId == id));
+            DbContext.SaveChanges();
         }
     }
 }
